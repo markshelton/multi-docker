@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t markshelton/multi-docker-client-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run markshelton/multi-docker-client-test npm test -- --coverage
+
+after_success:
+  - docker build -t markshelton/multi-docker-api ./api
+  - docker build -t markshelton/multi-docker-client ./client
+  - docker build -t markshelton/multi-docker-proxy ./proxy
+  - docker build -t markshelton/multi-docker-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push markshelton/multi-docker-api
+  - docker push markshelton/multi-docker-client
+  - docker push markshelton/multi-docker-proxy
+  - docker push markshelton/multi-docker-worker
