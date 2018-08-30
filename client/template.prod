@@ -1,0 +1,8 @@
+server {
+    listen $ENV{"CLIENT_PORT"};
+
+    location $ENV{"CLIENT_STUB"} {
+        root /usr/share/nginx/html;
+        index index.html index.htm;
+    }
+}

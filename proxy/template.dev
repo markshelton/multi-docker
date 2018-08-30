@@ -1,0 +1,27 @@
+upstream $ENV{"CLIENT_HOST"} {
+    server $ENV{"CLIENT_HOST"}:$ENV{"CLIENT_PORT"};
+}
+
+upstream $ENV{"API_HOST"} {
+    server $ENV{"API_HOST"}:$ENV{"API_PORT"};
+}
+
+server {
+    listen $ENV{"PROXY_PORT"};
+
+    location $ENV{"CLIENT_STUB"} {
+        proxy_pass http://$ENV{"CLIENT_HOST"};
+    }
+
+    location $ENV{"CLIENT_WS_STUB"} {
+        proxy_pass http://$ENV{"CLIENT_HOST"};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+    }
+
+    location $ENV{"API_STUB"} {
+        rewrite $ENV{"API_STUB"}/(.*) /$1 break;
+        proxy_pass http://$ENV{"API_HOST"};
+    }
+}

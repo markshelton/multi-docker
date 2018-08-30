@@ -1,0 +1,20 @@
+upstream $ENV{"CLIENT_HOST"} {
+    server $ENV{"CLIENT_HOST"}:$ENV{"CLIENT_PORT"};
+}
+
+upstream $ENV{"API_HOST"} {
+    server $ENV{"API_HOST"}:$ENV{"API_PORT"};
+}
+
+server {
+    listen $ENV{"PROXY_PORT"};
+
+    location $ENV{"CLIENT_STUB"} {
+        proxy_pass http://$ENV{"CLIENT_HOST"};
+    }
+
+    location $ENV{"API_STUB"} {
+        rewrite $ENV{"API_STUB"}/(.*) /$1 break;
+        proxy_pass http://$ENV{"API_HOST"};
+    }
+}

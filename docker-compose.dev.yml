@@ -1,0 +1,42 @@
+version: "3"
+services:
+  database:
+    image: postgres
+  cache:
+    image: redis
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - /c/Users/mark/Development/multi-docker/api:/app
+    env_file:
+      - .env
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - /c/Users/mark/Development/multi-docker/client:/app
+    env_file:
+      - .env
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - /c/Users/mark/Development/multi-docker/worker:/app
+    env_file:
+      - .env
+  proxy:
+    restart: always
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3050:80"
+    env_file:
+      - .env
