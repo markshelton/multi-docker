@@ -28,7 +28,7 @@
       "hostname": "proxy",
       "essential": true,
       "portMappings": [{ "hostPort": 80, "containerPort": 80 }],
-      "links": ["client", "server"],
+      "links": ["client", "api"],
       "memory": 128
     }
   ]
