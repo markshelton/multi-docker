@@ -5,19 +5,22 @@
       "name": "client",
       "image": "markshelton/multi-docker-client",
       "hostname": "client",
-      "essential": false
+      "essential": false,
+      "memory": 128
     },
     {
       "name": "api",
       "image": "markshelton/multi-docker-api",
       "hostname": "api",
-      "essential": false
+      "essential": false,
+      "memory": 128
     },
     {
       "name": "worker",
       "image": "markshelton/multi-docker-worker",
       "hostname": "worker",
-      "essential": false
+      "essential": false,
+      "memory": 128
     },
     {
       "name": "proxy",
@@ -25,7 +28,8 @@
       "hostname": "proxy",
       "essential": true,
       "portMappings": [{ "hostPort": 80, "containerPort": 80 }],
-      "links": ["client", "server"]
+      "links": ["client", "server"],
+      "memory": 128
     }
   ]
 }
